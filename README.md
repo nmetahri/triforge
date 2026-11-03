@@ -1,4 +1,6 @@
-# triforge
+<p align="center"><img src="docs/images/logo.svg" alt="triforge logo" width="120"></p>
+
+<h1 align="center">triforge</h1>
 
 [![CI](https://github.com/nmetahri/triforge/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/nmetahri/triforge/actions/workflows/ci.yml)
 
