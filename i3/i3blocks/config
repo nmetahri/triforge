@@ -69,7 +69,7 @@ separator_block_width=5
 [calendar]
 command=$SCRIPT_DIR/calendar
 interval=1
-LABEL=󰃭  
+LABEL=📅 
 DATEFMT=+%H:%M:%S
 HEIGHT=180
 WIDTH=220
