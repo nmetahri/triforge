@@ -10,6 +10,9 @@ An opinionated setup for Debian/Ubuntu-based systems, made of three independent 
 | `tmux` | tmux, TPM and plugins (resurrect, continuum, sensible) |
 | `alacritty` | Alacritty terminal and its configuration |
 
+![triforge desktop: one screen cut into 16 strips, one per theme](docs/images/themes-mosaic.png)
+<sub>One desktop, sixteen themes: each slanted strip is the same screen captured with a different theme.</sub>
+
 ## How to install ?
 
 Clone the repository and run the installer from its root:
@@ -50,6 +53,22 @@ The tmux setup uses [TPM](https://github.com/tmux-plugins/tpm) to install its pl
 **tmux-resurrect** from a maintained fork (https://github.com/nmetahri/tmux-resurrect) that bundles
 fixes still unmerged upstream (e.g. panes restored to `$HOME` when their title is empty).
 
+## Status Bar
+
+![i3blocks status bar](docs/images/status-bar.png)
+
+The i3 bar runs [i3blocks](https://github.com/vivien/i3blocks) with custom scripts (`i3/i3blocks/scripts`), from left to right:
+
+| Block | Shows |
+|---|---|
+| `top_process` | The process using the most resources (CPU + memory) |
+| `docker` | Number of running Docker containers, highlighted when some are running |
+| `volume` | Output volume, or `MUTE` |
+| `memory` | Used / total memory and its percentage |
+| `battery2` | Battery level and charging state |
+| `calendar` | Current time; click to open a calendar |
+| `time` | Current date, in your locale |
+
 ## Some commands to know for my i3-gnome environment
 `$mod` Refers to the modifier key (super by default)
 
@@ -88,6 +107,8 @@ To add a shortcut to that list, put a `# help: <English description>` comment ri
 optionally followed by translations (`# help-fr: <description en français>`). The menu uses your locale and
 falls back to English.
 
+![Shortcuts help menu](docs/images/shortcuts-help.png)
+
 * `$mod+Shift+e` Open system menu : (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 * `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`, lists autorandr profiles)
   (see [Monitor Profiles](#monitor-profiles-autorandr))
@@ -95,6 +116,8 @@ falls back to English.
 * `$mod+b` Choose a background image
 * `shift+Print` Take a screenshot on selected area
 * `Print` Take a full window screenshot
+* `$mod+Ctrl+>` / `$mod+Ctrl+<` Move the focused workspace to the right / left monitor
+* `$mod+Shift+,` Show the shortcuts help menu
 
 ## Monitor Profiles (autorandr)
 
@@ -140,6 +163,10 @@ used when a translation is missing. To add a language, copy `i3/configuration/lo
 This setup includes a dynamic theme switching system that allows you to easily change color schemes.
 
 ### Available Themes
+Themes recolor the i3 bar (background, workspace buttons, focused workspace):
+
+![The 16 themes applied to the i3 bar](docs/images/themes-gallery.png)
+
 1. **Minimaliste** - Clean and minimal color palette
 2. **Glassmorphism** - Modern frosted glass aesthetic
 3. **Cyberpunk** - Neon-inspired dark theme
@@ -156,6 +183,10 @@ This setup includes a dynamic theme switching system that allows you to easily c
 14. **Gotham** - Very dark, low-contrast blue-green
 15. **Ayu** - Minimal dark theme with warm accents
 16. **Badwolf** - Dark theme with bright, punchy highlights
+
+### Wallpaper
+triforge ships its own wallpaper (`i3/configuration/wallpapers/triforge.png`, a dark low-poly gradient that
+suits every theme). It is used until you pick another one with `$mod+b`, which is then remembered.
 
 ### How to Switch Themes
 Press `$mod+Shift+t` to open the theme selector (dmenu). Choose a theme from the list and it will be immediately applied to:
