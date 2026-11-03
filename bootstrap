@@ -1,14 +1,15 @@
 #!/bin/bash
 # One-line installer: clones (or updates) triforge, then runs its installer with the given arguments.
 # Usage: bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" [-- ARGS...]
+# Set TRIFORGE_REF to a release tag (e.g. v1.0.0) or a branch to install it instead of main.
 # Run it as your user, not as root: it calls sudo itself so configurations land in your home.
 
 set -e
 
 readonly DEFAULT_REPOSITORY="https://github.com/nmetahri/triforge.git"
-readonly DEFAULT_BRANCH="main"
+readonly DEFAULT_REF="main"
 readonly REPOSITORY="${TRIFORGE_REPOSITORY:-$DEFAULT_REPOSITORY}"
-readonly BRANCH="${TRIFORGE_BRANCH:-$DEFAULT_BRANCH}"
+readonly REF="${TRIFORGE_REF:-$DEFAULT_REF}"
 readonly INSTALL_DIRECTORY="${TRIFORGE_DIRECTORY:-${XDG_DATA_HOME:-$HOME/.local/share}/triforge}"
 
 print_step() {
@@ -37,12 +38,14 @@ ensure_git() {
 
 fetch_repository() {
     if [ -d "$INSTALL_DIRECTORY/.git" ]; then
-        print_step "Updating triforge in $INSTALL_DIRECTORY..."
-        git -C "$INSTALL_DIRECTORY" pull --ff-only origin "$BRANCH"
+        print_step "Updating triforge in $INSTALL_DIRECTORY to $REF..."
+        # fetch + checkout works for both branches and tags, unlike pull
+        git -C "$INSTALL_DIRECTORY" fetch --quiet --tags --force origin "$REF"
+        git -C "$INSTALL_DIRECTORY" checkout --quiet --detach FETCH_HEAD
     else
-        print_step "Cloning triforge into $INSTALL_DIRECTORY..."
+        print_step "Cloning triforge $REF into $INSTALL_DIRECTORY..."
         mkdir -p "$(dirname "$INSTALL_DIRECTORY")"
-        git clone --branch "$BRANCH" "$REPOSITORY" "$INSTALL_DIRECTORY"
+        git -c advice.detachedHead=false clone --quiet --branch "$REF" "$REPOSITORY" "$INSTALL_DIRECTORY"
     fi
 }
 
