@@ -1,16 +1,39 @@
-# i3-Gnome Environment Setup + My Tmux Config
+# triforge
 
-This repository contains a complete, opinionated setup for an i3-Gnome environment on Debian/Ubuntu-based systems.
+[![CI](https://github.com/nmetahri/triforge/actions/workflows/ci.yml/badge.svg)](https://github.com/nmetahri/triforge/actions/workflows/ci.yml)
 
-It is installed via a single script that handles all package dependencies (like `gdm3`, `gnome-session`, `gnome-keyring`, etc.), builds `i3blocks`, and copies all personal configuration files.
+An opinionated setup for Debian/Ubuntu-based systems, made of three independent components:
 
-## How to use ?
+| Component | What it installs |
+|---|---|
+| `i3` | i3-gnome environment: packages, `i3blocks`, Hack Nerd Font, themes and configuration |
+| `tmux` | tmux, TPM and plugins (resurrect, continuum, sensible) |
+| `alacritty` | Alacritty terminal and its configuration |
 
-Each directory is independant so you can install whatever you want.
+## How to install ?
 
-It is recommended to install and configure packages in that order : 
-- I3
-- Tmux
+Clone the repository and run the installer from its root:
+
+```bash
+git clone https://github.com/nmetahri/triforge.git
+cd triforge
+sudo ./install
+```
+
+Without arguments, a checklist lets you pick the components. You can also name them directly:
+
+```bash
+sudo ./install tmux alacritty     # install only tmux and Alacritty
+sudo ./install --update           # pick components, then update their configuration only
+sudo ./install --update i3        # update the i3 configuration after a git pull
+sudo ./install --yes i3 tmux      # no confirmation prompts
+sudo ./install --help
+```
+
+Configuration files are always installed in the home directory of the user who ran `sudo`.
+Each component can also be installed on its own with its `install` script (e.g. `sudo ./tmux/install`).
+
+After installing `i3`, reboot and select the `i3+gnome` session at the login screen.
 
 ## External Dependencies
 
@@ -21,27 +44,11 @@ This setup builds and installs from the following external projects:
 
 Both are automatically cloned, built, and installed by the install script. Check their repositories for license information and updates.
 
+**Hack Nerd Font** (https://github.com/ryanoasis/nerd-fonts) is not packaged by Debian/Ubuntu: the i3 installer downloads a pinned release into `/usr/local/share/fonts`.
+
 The tmux setup uses [TPM](https://github.com/tmux-plugins/tpm) to install its plugins, including
 **tmux-resurrect** from a maintained fork (https://github.com/nmetahri/tmux-resurrect) that bundles
 fixes still unmerged upstream (e.g. panes restored to `$HOME` when their title is empty).
-
-## How to install a package ?
-
-### Tmux
-
-All you have to do, in order to install and configure tmux, is :
-- Go to package directory (e.g. `cd tmux`)
-- Give execution permission to `install`
-- Execute `install` as **super user (sudo)**
-
-### I3
-
-All you have to do, in order to install and configure i3-gnome environment, is :
-- Go to i3 directory (e.g. `cd i3`)
-- Give execution permission to `install.sh`
-- Execute `install.sh` as **super user (sudo)**
-- Reboot your system and select `i3+gnome` session at login screen
-- Login and enjoy your new i3-gnome environment !
 
 ## Some commands to know for my i3-gnome environment
 `$mod` Refers to the modifier key (super by default)
@@ -171,11 +178,8 @@ Alacritty is automatically configured and managed by the installation script.
 ### Updating Alacritty Config
 When you pull updates from the repository and want to update Alacritty configuration:
 ```bash
-cd i3
-sudo ./install --update
+sudo ./install --update alacritty
 ```
-
-This will update both i3 and Alacritty configurations to the latest versions.
 
 ## How to assign an application to a specific workspace ?
 
@@ -191,3 +195,13 @@ for_window [class="Firefox"] focus
 ```  
 
 This will always assign Firefox to workspace 3 and focus it when it is launched.
+
+## Testing
+
+Every push runs [shellcheck](https://www.shellcheck.net/) and installs each component in fresh
+`ubuntu:24.04` and `debian:stable-slim` containers, then checks the result (file ownership, TPM plugins,
+valid i3 and Alacritty configuration...). Run the same test locally with Docker:
+
+```bash
+tests/run_locally.sh ubuntu:24.04 tmux alacritty
+```
