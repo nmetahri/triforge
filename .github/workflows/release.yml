@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches the VERSION file
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          file_version="$(cat VERSION)"
+          if [ "$tag_version" != "$file_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match VERSION ($file_version)"
+            exit 1
+          fi
+
+      - name: Extract the release notes from CHANGELOG.md
+        run: |
+          # Lines between "## [X.Y.Z]" and the next "## [" heading or the trailing "[X]: url" link list
+          awk -v version="${GITHUB_REF_NAME#v}" '
+            /^## \[/ { in_section = index($0, "## [" version "]") == 1; next }
+            /^\[[^]]+\]: / { in_section = 0 }
+            in_section
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::No CHANGELOG.md entry for ${GITHUB_REF_NAME#v}"
+            exit 1
+          fi
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "triforge $GITHUB_REF_NAME" --notes-file release-notes.md --verify-tag
