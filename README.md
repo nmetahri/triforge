@@ -1,6 +1,6 @@
 # triforge
 
-[![CI](https://github.com/nmetahri/triforge/actions/workflows/ci.yml/badge.svg)](https://github.com/nmetahri/triforge/actions/workflows/ci.yml)
+[![CI](https://github.com/nmetahri/triforge/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/nmetahri/triforge/actions/workflows/ci.yml)
 
 An opinionated setup for Debian/Ubuntu-based systems, made of three independent components:
 
@@ -210,7 +210,7 @@ This will always assign Firefox to workspace 3 and focus it when it is launched.
 
 ## Testing
 
-Every push runs [shellcheck](https://www.shellcheck.net/) and installs each component in fresh
+Every pull request runs [shellcheck](https://www.shellcheck.net/) and installs each component in fresh
 `ubuntu:24.04` and `debian:stable-slim` containers, then checks the result (file ownership, TPM plugins,
 valid i3 and Alacritty configuration...). Run the same test locally with Docker:
 
