@@ -73,6 +73,7 @@ verify_i3() {
     check "i3 configuration owned by $(id -un)" is_owned_by_current_user "$HOME/.config/i3/config"
     check "i3blocks configuration copied" test -f "$HOME/.config/i3blocks/config"
     check "i3blocks built and installed" command -v i3blocks
+    check "I3 + GNOME session registered" test -f /usr/share/xsessions/i3-gnome.desktop
     check "Hack Nerd Font available" has_hack_nerd_font
     check "first-start theme bootstrap succeeds" bootstrap_i3_theme
     check "i3 configuration is valid (i3 -C)" i3 -C -c "$HOME/.config/i3/config"

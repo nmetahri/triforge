@@ -63,10 +63,11 @@ After installing `i3`, reboot and select the `i3+gnome` session at the login scr
 
 This setup builds and installs from the following external projects:
 
-- **i3blocks** (https://github.com/vivien/i3blocks) — Status bar for i3
-- **i3-gnome** (https://github.com/i3-gnome/i3-gnome.git) — Gnome 3 session integration with i3
-
-Both are automatically cloned, built, and installed by the install script. Check their repositories for license information and updates.
+- **i3blocks** (https://github.com/vivien/i3blocks, GPL-3.0) — Status bar for i3. Debian/Ubuntu only package the
+  older 1.4 release, so the installer builds it from source, pinned to a known `master` commit (`I3BLOCKS_COMMIT`
+  in `i3/install`).
+- **i3-gnome** (https://github.com/i3-gnome/i3-gnome, MIT) — GNOME session integration for i3. The project is
+  archived, so its session files are vendored in [`i3/i3-gnome`](i3/i3-gnome) and installed from there.
 
 **Hack Nerd Font** (https://github.com/ryanoasis/nerd-fonts) is not packaged by Debian/Ubuntu: the i3 installer downloads a pinned release into `/usr/local/share/fonts`.
 
