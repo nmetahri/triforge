@@ -1,0 +1,46 @@
+#!/bin/bash
+# Installs the Alacritty terminal and its configuration.
+
+set -e
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source "${SCRIPT_DIR}/../lib/common.sh"
+
+show_help() {
+    printf '%b\n' "${COLOR_BLUE}Alacritty Installer${COLOR_RESET}
+
+${COLOR_YELLOW}Usage:${COLOR_RESET}
+    sudo ./install [OPTIONS]
+
+${COLOR_YELLOW}Options:${COLOR_RESET}
+    (no arguments)      Install Alacritty and its configuration
+    --update            Update only the configuration file (no package installation)
+    -h, --help          Show this help message"
+}
+
+setup_alacritty_config() {
+    print_info "Setting up Alacritty configuration..."
+    install_user_file "${SCRIPT_DIR}/alacritty.toml" "$(target_user_home)/.config/alacritty/alacritty.toml"
+    print_success "Alacritty configuration copied"
+}
+
+main() {
+    local update_mode=false
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --update) update_mode=true ;;
+            -h|--help) show_help; exit 0 ;;
+            *) print_error "Unknown option: $1"; echo "Use --help for usage information"; exit 1 ;;
+        esac
+        shift
+    done
+
+    require_sudo
+    if [ "$update_mode" = false ]; then
+        require_supported_distribution
+        install_apt_packages alacritty
+    fi
+    setup_alacritty_config
+}
+
+main "$@"

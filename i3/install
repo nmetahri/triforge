@@ -10,7 +10,7 @@ readonly PACKAGES=(
     "xorg" "i3-wm" "i3lock-fancy" "i3status" "dmenu" "fonts-hack-nerd"
     "feh" "flameshot" "bash-completion" "autoconf" "automake" "pkg-config"
     "light" "acpi" "blueman" "alsa-utils" "gnome-flashback" "zenity"
-    "numlockx" "playerctl" "alacritty" "build-essential"
+    "numlockx" "playerctl" "build-essential"
     "gdm3" "dbus-x11" "gnome-settings-daemon"
     "dex" "xautolock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
     "gnome-power-manager" "git" "gnome-session" "gnome-keyring"
@@ -57,16 +57,9 @@ setup_i3blocks() {
     print_success "i3blocks configuration copied"
 }
 
-setup_alacritty() {
-    print_info "Setting up Alacritty configuration..."
-    install_user_file "${SCRIPT_DIR}/../alacritty/alacritty.toml" "${TARGET_HOME}/.config/alacritty/alacritty.toml"
-    print_success "Alacritty configuration copied"
-}
-
 setup_configuration() {
     setup_i3_config
     setup_i3blocks
-    setup_alacritty
 }
 
 update_configuration() {
