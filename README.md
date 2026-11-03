@@ -3,6 +3,7 @@
 <h1 align="center">triforge</h1>
 
 [![CI](https://github.com/nmetahri/triforge/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/nmetahri/triforge/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/nmetahri/triforge)](https://github.com/nmetahri/triforge/releases/latest)
 
 An opinionated setup for Debian/Ubuntu-based systems, made of three independent components:
 
@@ -36,6 +37,13 @@ copies the configuration files without reinstalling packages (add component name
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" -- --update
+```
+
+To install a specific release instead of the latest `main`, set `TRIFORGE_REF` to its tag
+(the same variable switches an existing installation to another release):
+
+```bash
+TRIFORGE_REF=v1.0.0 bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)"
 ```
 
 As with any script piped from the internet, you can [read it](bootstrap) before running it.
@@ -266,6 +274,18 @@ for_window [class="Firefox"] focus
 ```  
 
 This will always assign Firefox to workspace 3 and focus it when it is launched.
+
+## Versioning
+
+triforge follows [Semantic Versioning](https://semver.org/): see [`CHANGELOG.md`](CHANGELOG.md) for what changed
+in each release, and `./install --version` for the installed version.
+
+To publish a release: bump `VERSION`, add its section to `CHANGELOG.md` and merge that pull request, then push
+the tag. The release workflow checks the tag against `VERSION` and publishes the changelog section as release notes:
+
+```bash
+git tag -a v1.0.0 -m "v1.0.0" && git push origin v1.0.0
+```
 
 ## Testing
 
