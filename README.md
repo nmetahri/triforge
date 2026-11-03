@@ -84,7 +84,9 @@ fixes still unmerged upstream (e.g. panes restored to `$HOME` when their title i
 
 ### Custom key bindings
 Press `$mod+Shift+,` (`$mod+?` on AZERTY keyboards) to open a searchable list of these shortcuts.
-To add a shortcut to that list, put a `# help: <description>` comment right above its `bindsym`.
+To add a shortcut to that list, put a `# help: <English description>` comment right above its `bindsym`,
+optionally followed by translations (`# help-fr: <description en français>`). The menu uses your locale and
+falls back to English.
 
 * `$mod+Shift+e` Open system menu : (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 * `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`, lists autorandr profiles)

@@ -161,12 +161,14 @@ mode "$mode_system" {
     bindsym Escape mode "default"
 }
 
-# help: Menu système : verrouiller, déconnexion, veille, hibernation, redémarrage, extinction
+# help: System menu: lock, logout, suspend, hibernate, reboot, shutdown
+# help-fr: Menu système : verrouiller, déconnexion, veille, hibernation, redémarrage, extinction
 bindsym $mod+Shift+e mode "$mode_system"
 
 # Background selector 
 exec --no-startup-id sh -c '[ -f ~/.last_wallpaper ] && feh --bg-scale "$(cat ~/.last_wallpaper)"'
-# help: Choisir un fond d'écran
+# help: Choose a wallpaper
+# help-fr: Choisir un fond d'écran
 bindsym $mod+b exec --no-startup-id ~/.config/i3/scripts/set_wallpaper.bash
 
 # Include themes configuration
@@ -186,15 +188,19 @@ bindsym XF86MonBrightnessUp exec --no-startup-id light -A 20
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 20
 
 ## Flameshot
-# help: Capture de tout l'écran
+# help: Screenshot of the whole screen
+# help-fr: Capture de tout l'écran
 bindsym Print       exec --no-startup-id flameshot full
-# help: Capture d'une zone
+# help: Screenshot of a selected area
+# help-fr: Capture d'une zone
 bindsym Shift+Print exec --no-startup-id flameshot gui
 
 ## move focused workspace between monitors
-# help: Déplacer le workspace vers l'écran de droite
+# help: Move workspace to the right monitor
+# help-fr: Déplacer le workspace vers l'écran de droite
 bindsym $mod+Ctrl+greater move workspace to output right
-# help: Déplacer le workspace vers l'écran de gauche
+# help: Move workspace to the left monitor
+# help-fr: Déplacer le workspace vers l'écran de gauche
 bindsym $mod+Ctrl+less move workspace to output left
 
 ## Gnome Flashback Config (please see : https://github.com/i3-gnome/i3-gnome)
@@ -207,12 +213,14 @@ exec --no-startup-id gnome-flashback
 exec --no-startup-id numlockx on
 
 # Keybindings help menu ($mod+Shift+, is $mod+? on AZERTY keyboards)
-# help: Afficher cette aide
+# help: Show this help
+# help-fr: Afficher cette aide
 bindsym $mod+Shift+comma exec --no-startup-id ~/.config/i3/scripts/show-keybindings.sh
-for_window [title="^Raccourcis i3$"] floating enable
+for_window [title="^i3 — "] floating enable
 
 # Monitor script selector menu
-# help: Choisir un profil d'écrans (autorandr)
+# help: Choose a monitor profile (autorandr)
+# help-fr: Choisir un profil d'écrans (autorandr)
 bindsym $mod+p exec --no-startup-id ~/.config/i3/scripts/select_xrandr_profile.bash
 
 # Include custom config
