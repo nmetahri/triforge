@@ -5,6 +5,18 @@ color=#CDD6F4
 separator=false
 separator_block_width=10
 
+[top_process]
+command=$SCRIPT_DIR/top_process
+interval=10
+LABEL=
+color=#FAB387
+
+[separator]
+full_text=<span color="#45475A"> | </span>
+markup=pango
+separator=false
+separator_block_width=5
+
 [docker]
 command=$SCRIPT_DIR/docker
 color=#0db7ed

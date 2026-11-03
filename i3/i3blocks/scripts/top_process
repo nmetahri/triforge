@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Top process by weighted score: cpu + 1.5 * mem
+read -r name cpu mem <<< $(ps -eo comm,%cpu,%mem --no-headers \
+    | awk '{score = $2 + 1.5 * $3; print score, $1, $2, $3}' \
+    | sort -rn \
+    | awk 'NR==1 {printf "%s %.0f%% %.0f%%", $2, $3, $4}')
+
+if [ -z "$name" ]; then
+    echo "${LABEL}idle"
+else
+    echo "${LABEL}${name} 󰈸"
+fi
