@@ -78,11 +78,43 @@ All you have to do, in order to install and configure i3-gnome environment, is :
 ### Custom key bindings
 * `$mod+Shift+e` Open system menu : (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 * `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`, lists autorandr profiles)
-  Profiles are machine-specific and not versioned: create them with `autorandr --save <name>`
+  (see [Monitor Profiles](#monitor-profiles-autorandr))
 * `$mod+Shift+t` Open theme selector (dmenu with available themes)
 * `$mod+b` Choose a background image
 * `shift+Print` Take a screenshot on selected area
 * `Print` Take a full window screenshot
+
+## Monitor Profiles (autorandr)
+
+Monitor layouts are handled by [autorandr](https://github.com/phillipberndt/autorandr). Each profile stores
+an `xrandr` layout plus the fingerprint of the connected screens, so the right layout is picked automatically.
+Profiles are machine-specific, so they are **not versioned**: create them on each machine.
+
+### Create a profile
+1. Plug in your monitors and arrange them (with `xrandr`, or a GUI such as `arandr`)
+2. Save the current layout: `autorandr --save <name>` (e.g. `office`, `home`, `laptop`)
+3. Repeat for every setup you use
+
+Profiles are stored in `~/.config/autorandr/<name>/`.
+
+### Use profiles
+* At i3 startup, `autorandr --change` loads the profile matching the connected screens
+* `$mod + p` opens a dmenu list of your profiles to switch manually
+* `autorandr --list` lists profiles, `autorandr --load <name>` loads one from a terminal
+
+### Run something after each switch
+autorandr runs `~/.config/autorandr/postswitch` (if executable) after loading a profile. Restarting i3 there
+re-applies the workspace-to-output assignments from `workspaces.conf`:
+
+```bash
+#!/bin/bash
+sleep 1
+[ -f ~/.last_wallpaper ] && feh --bg-scale "$(cat ~/.last_wallpaper)" &
+i3-msg restart &
+```
+
+Workspaces are pinned to outputs in `workspaces.conf` (`DP-1`, `HDMI-1`, then `eDP-1` as fallback).
+Adjust these names to your hardware: `xrandr --query` lists them.
 
 ## Theme System
 
