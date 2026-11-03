@@ -1,13 +1,82 @@
 #!/bin/bash
+# Installs tmux, the TPM plugin manager, the tmux configuration and its plugins.
 
-echo "Installing and configuring tmux..."
-sudo apt update && sudo apt install tmux -y
+set -e
 
-echo "Activating custom plugins (tmux-resurrect, tmux-continuum, tmux-sensible)"
-mkdir -p ${HOME}/.tmux/plugins
-git clone https://github.com/tmux-plugins/tpm ${HOME}/.tmux/plugins/tpm
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source "${SCRIPT_DIR}/../lib/common.sh"
 
-cp ./configuration/.tmux.conf ${HOME}
-tmux source ${HOME}/.tmux.conf
+readonly TPM_REPOSITORY="https://github.com/tmux-plugins/tpm"
 
+show_help() {
+    printf '%b\n' "${COLOR_BLUE}Tmux Installer${COLOR_RESET}
 
+${COLOR_YELLOW}Usage:${COLOR_RESET}
+    sudo ./install [OPTIONS]
+
+${COLOR_YELLOW}Options:${COLOR_RESET}
+    (no arguments)      Install tmux, TPM, the configuration and its plugins
+    --update            Update only the configuration file and reload it (no package installation)
+    -h, --help          Show this help message"
+}
+
+tpm_directory() {
+    echo "$(target_user_home)/.tmux/plugins/tpm"
+}
+
+install_tpm() {
+    if [ -d "$(tpm_directory)" ]; then
+        print_success "TPM already installed"
+        return 0
+    fi
+    print_info "Installing TPM..."
+    run_as_target_user git clone "$TPM_REPOSITORY" "$(tpm_directory)"
+    print_success "TPM installed"
+}
+
+setup_tmux_config() {
+    print_info "Setting up tmux configuration..."
+    install_user_file "${SCRIPT_DIR}/configuration/.tmux.conf" "$(target_user_home)/.tmux.conf"
+    print_success "tmux configuration copied"
+}
+
+install_tmux_plugins() {
+    print_info "Installing tmux plugins (tmux-resurrect, tmux-continuum, tmux-sensible)..."
+    run_as_target_user "$(tpm_directory)/bin/install_plugins"
+    print_success "tmux plugins installed"
+}
+
+reload_running_tmux() {
+    if run_as_target_user tmux has-session 2>/dev/null; then
+        run_as_target_user tmux source-file "$(target_user_home)/.tmux.conf"
+        print_success "Running tmux server reloaded"
+    else
+        print_info "No running tmux server: configuration will load on next start"
+    fi
+}
+
+main() {
+    local update_mode=false
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --update) update_mode=true ;;
+            -h|--help) show_help; exit 0 ;;
+            *) print_error "Unknown option: $1"; echo "Use --help for usage information"; exit 1 ;;
+        esac
+        shift
+    done
+
+    require_sudo
+    if [ "$update_mode" = false ]; then
+        require_supported_distribution
+        install_apt_packages tmux git
+        install_tpm
+    fi
+    setup_tmux_config
+    if [ "$update_mode" = false ]; then
+        install_tmux_plugins
+    fi
+    reload_running_tmux
+}
+
+main "$@"
