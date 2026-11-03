@@ -16,6 +16,7 @@ declare -A COMPONENT_DESCRIPTIONS=(
 readonly COMPONENT_DESCRIPTIONS
 readonly CHECKLIST_HEIGHT=15
 readonly CHECKLIST_WIDTH=72
+readonly VERSION_FILE="${SCRIPT_DIR}/VERSION"
 
 SELECTED_COMPONENTS=()
 
@@ -35,12 +36,25 @@ ${COLOR_YELLOW}Components:${COLOR_RESET}
 ${COLOR_YELLOW}Options:${COLOR_RESET}
     --update      Update only the configuration files (no package installation)
     -y, --yes     Do not ask for confirmation
+    -V, --version Show the triforge version
     -h, --help    Show this help message
 
 ${COLOR_YELLOW}Examples:${COLOR_RESET}
     sudo ./install                  # Choose components interactively
     sudo ./install tmux alacritty   # Install tmux and Alacritty
     sudo ./install --update i3      # Update the i3 configuration"
+}
+
+# Prints "triforge 1.0.0", plus the commit when running from a git clone
+show_version() {
+    local version
+    version="$(cat "$VERSION_FILE")"
+    local commit
+    if commit="$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null)"; then
+        echo "triforge ${version} (${commit})"
+    else
+        echo "triforge ${version}"
+    fi
 }
 
 is_known_component() {
@@ -112,6 +126,7 @@ main() {
             --update) installer_options+=("--update") ;;
             -y|--yes) export ASSUME_YES=true ;;
             -h|--help) show_help; exit 0 ;;
+            -V|--version) show_version; exit 0 ;;
             -*) print_error "Unknown option: $1"; echo "Use --help for usage information"; exit 1 ;;
             *)
                 if ! is_known_component "$1"; then
