@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Lint installers and tests
-        run: shellcheck -x install */install lib/common.sh tests/*.sh
+        run: shellcheck -x install bootstrap */install lib/common.sh tests/*.sh
 
   install:
     needs: shellcheck
@@ -25,6 +25,10 @@ jobs:
       matrix:
         image: ["ubuntu:24.04", "debian:stable-slim"]
         components: ["tmux alacritty", "i3"]
+        include:
+          # One-line install: bootstrap clones the code under test, installs, then updates through git pull
+          - image: "ubuntu:24.04"
+            components: "--bootstrap tmux alacritty"
     name: install ${{ matrix.components }} on ${{ matrix.image }}
     steps:
       - uses: actions/checkout@v4

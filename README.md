@@ -12,6 +12,25 @@ An opinionated setup for Debian/Ubuntu-based systems, made of three independent 
 
 ## How to install ?
 
+### One-line install
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)"
+```
+
+Run it as your regular user, not with `sudo`: it asks for your password when needed. It installs `git` if
+missing, clones triforge into `~/.local/share/triforge` (or updates it), then runs the installer below.
+Pass installer arguments after `--`:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" -- tmux alacritty
+```
+
+Running it again updates the clone first, so it is also the quickest way to get the latest version.
+As with any script piped from the internet, you can [read it](bootstrap) before running it.
+
+### From a clone
+
 Clone the repository and run the installer from its root:
 
 ```bash

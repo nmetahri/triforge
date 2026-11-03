@@ -1,0 +1,58 @@
+#!/bin/bash
+# One-line installer: clones (or updates) triforge, then runs its installer with the given arguments.
+# Usage: bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" [-- ARGS...]
+# Run it as your user, not as root: it calls sudo itself so configurations land in your home.
+
+set -e
+
+readonly DEFAULT_REPOSITORY="https://github.com/nmetahri/triforge.git"
+readonly DEFAULT_BRANCH="main"
+readonly REPOSITORY="${TRIFORGE_REPOSITORY:-$DEFAULT_REPOSITORY}"
+readonly BRANCH="${TRIFORGE_BRANCH:-$DEFAULT_BRANCH}"
+readonly INSTALL_DIRECTORY="${TRIFORGE_DIRECTORY:-${XDG_DATA_HOME:-$HOME/.local/share}/triforge}"
+
+print_step() {
+    echo -e "\033[0;34m$*\033[0m"
+}
+
+print_error() {
+    echo -e "\033[0;31m$*\033[0m" >&2
+}
+
+refuse_root() {
+    if [ "$(id -u)" -eq 0 ]; then
+        print_error "Run this as your regular user (it calls sudo itself), not as root."
+        exit 1
+    fi
+}
+
+ensure_git() {
+    if command -v git >/dev/null 2>&1; then
+        return 0
+    fi
+    print_step "Installing git..."
+    sudo apt-get update
+    sudo apt-get install -y git
+}
+
+fetch_repository() {
+    if [ -d "$INSTALL_DIRECTORY/.git" ]; then
+        print_step "Updating triforge in $INSTALL_DIRECTORY..."
+        git -C "$INSTALL_DIRECTORY" pull --ff-only origin "$BRANCH"
+    else
+        print_step "Cloning triforge into $INSTALL_DIRECTORY..."
+        mkdir -p "$(dirname "$INSTALL_DIRECTORY")"
+        git clone --branch "$BRANCH" "$REPOSITORY" "$INSTALL_DIRECTORY"
+    fi
+}
+
+main() {
+    refuse_root
+    ensure_git
+    fetch_repository
+    print_step "Running the triforge installer..."
+    sudo "$INSTALL_DIRECTORY/install" "$@"
+}
+
+# Everything runs from this last line, so a partially downloaded script never executes
+main "$@"
