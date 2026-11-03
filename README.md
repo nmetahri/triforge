@@ -31,7 +31,13 @@ Pass installer arguments after `--`:
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" -- tmux alacritty
 ```
 
-Running it again updates the clone first, so it is also the quickest way to get the latest version.
+To update an existing installation, run it again with `--update`: it pulls the latest version first, then
+copies the configuration files without reinstalling packages (add component names to skip the checklist):
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/nmetahri/triforge/main/bootstrap)" -- --update
+```
+
 As with any script piped from the internet, you can [read it](bootstrap) before running it.
 
 ### From a clone
