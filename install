@@ -1,0 +1,138 @@
+#!/bin/bash
+# Entry point: installs the selected triforge components (i3, tmux, alacritty).
+
+set -e
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source "${SCRIPT_DIR}/lib/common.sh"
+
+readonly COMPONENTS=("i3" "tmux" "alacritty")
+declare -A COMPONENT_DESCRIPTIONS=(
+    ["i3"]="i3-gnome environment, i3blocks and themes"
+    ["tmux"]="tmux, TPM and plugins (resurrect, continuum)"
+    ["alacritty"]="Alacritty terminal and its configuration"
+)
+readonly COMPONENT_DESCRIPTIONS
+readonly CHECKLIST_HEIGHT=15
+readonly CHECKLIST_WIDTH=72
+
+SELECTED_COMPONENTS=()
+
+show_help() {
+    printf '%b\n' "${COLOR_BLUE}triforge installer${COLOR_RESET}
+
+${COLOR_YELLOW}Usage:${COLOR_RESET}
+    sudo ./install [OPTIONS] [COMPONENT...]
+
+${COLOR_YELLOW}Components:${COLOR_RESET}
+    i3          ${COMPONENT_DESCRIPTIONS[i3]}
+    tmux        ${COMPONENT_DESCRIPTIONS[tmux]}
+    alacritty   ${COMPONENT_DESCRIPTIONS[alacritty]}
+
+    Without components, an interactive checklist lets you pick them.
+
+${COLOR_YELLOW}Options:${COLOR_RESET}
+    --update      Update only the configuration files (no package installation)
+    -y, --yes     Do not ask for confirmation
+    -h, --help    Show this help message
+
+${COLOR_YELLOW}Examples:${COLOR_RESET}
+    sudo ./install                  # Choose components interactively
+    sudo ./install tmux alacritty   # Install tmux and Alacritty
+    sudo ./install --update i3      # Update the i3 configuration"
+}
+
+is_known_component() {
+    local candidate="$1"
+    local component
+    for component in "${COMPONENTS[@]}"; do
+        [ "$component" = "$candidate" ] && return 0
+    done
+    return 1
+}
+
+select_components_with_checklist() {
+    local checklist_entries=()
+    local component
+    for component in "${COMPONENTS[@]}"; do
+        checklist_entries+=("$component" "${COMPONENT_DESCRIPTIONS[$component]}" "OFF")
+    done
+    local selection
+    if ! selection="$(whiptail --title "triforge" --separate-output \
+        --checklist "Select the components to install (space to toggle):" \
+        "$CHECKLIST_HEIGHT" "$CHECKLIST_WIDTH" "${#COMPONENTS[@]}" \
+        "${checklist_entries[@]}" 3>&1 1>&2 2>&3)"; then
+        print_warning "Installation cancelled."
+        exit 0
+    fi
+    mapfile -t SELECTED_COMPONENTS <<< "$selection"
+}
+
+select_components_with_prompts() {
+    local component
+    for component in "${COMPONENTS[@]}"; do
+        if ask_confirmation "Install ${component} (${COMPONENT_DESCRIPTIONS[$component]})?"; then
+            SELECTED_COMPONENTS+=("$component")
+        fi
+    done
+}
+
+select_components_interactively() {
+    if command -v whiptail >/dev/null 2>&1; then
+        select_components_with_checklist
+    else
+        select_components_with_prompts
+    fi
+}
+
+is_selected() {
+    local candidate="$1"
+    local component
+    for component in "${SELECTED_COMPONENTS[@]}"; do
+        [ "$component" = "$candidate" ] && return 0
+    done
+    return 1
+}
+
+run_component_installers() {
+    local installer_options=("$@")
+    local component
+    for component in "${COMPONENTS[@]}"; do
+        is_selected "$component" || continue
+        print_info "========== Installing ${component} =========="
+        bash "${SCRIPT_DIR}/${component}/install" "${installer_options[@]}"
+    done
+}
+
+main() {
+    local installer_options=()
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --update) installer_options+=("--update") ;;
+            -y|--yes) export ASSUME_YES=true ;;
+            -h|--help) show_help; exit 0 ;;
+            -*) print_error "Unknown option: $1"; echo "Use --help for usage information"; exit 1 ;;
+            *)
+                if ! is_known_component "$1"; then
+                    print_error "Unknown component: $1 (expected: ${COMPONENTS[*]})"
+                    exit 1
+                fi
+                SELECTED_COMPONENTS+=("$1")
+                ;;
+        esac
+        shift
+    done
+
+    require_sudo
+    if [ ${#SELECTED_COMPONENTS[@]} -eq 0 ]; then
+        select_components_interactively
+    fi
+    if [ ${#SELECTED_COMPONENTS[@]} -eq 0 ] || [ -z "${SELECTED_COMPONENTS[0]}" ]; then
+        print_warning "No component selected, nothing to do."
+        exit 0
+    fi
+    run_component_installers "${installer_options[@]}"
+    print_success "Selected components installed: ${SELECTED_COMPONENTS[*]}"
+}
+
+main "$@"
