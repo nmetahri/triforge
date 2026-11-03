@@ -77,7 +77,8 @@ All you have to do, in order to install and configure i3-gnome environment, is :
 
 ### Custom key bindings
 * `$mod+Shift+e` Open system menu : (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
-* `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`)
+* `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`, lists autorandr profiles)
+  Profiles are machine-specific and not versioned: create them with `autorandr --save <name>`
 * `$mod+Shift+t` Open theme selector (dmenu with available themes)
 * `$mod+b` Choose a background image
 * `shift+Print` Take a screenshot on selected area

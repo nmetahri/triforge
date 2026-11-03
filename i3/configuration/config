@@ -169,8 +169,8 @@ bindsym $mod+b exec --no-startup-id ~/.config/i3/scripts/set_wallpaper.bash
 # Include themes configuration
 include themes.conf
 
-# Setup monitor(s) if a custom configuration file exists 
-exec --no-startup-id sh -c '[ -f ~/.config/i3/monitor_config ] && ~/.config/i3/monitor_config'
+# Setup monitor(s) via autorandr profile matching
+exec --no-startup-id autorandr --change
 
 ## Media controls
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
