@@ -3,9 +3,11 @@
 # --- Configuration ---
 VIDEO_PATH="$1"
 IPC_SOCKET="/tmp/mpv-wallpaper.sock"
+# shellcheck source=locale.sh
+source "$HOME/.config/i3/scripts/locale.sh"
 
 if [ -z "$VIDEO_PATH" ]; then
-    echo "Usage: ./vwp.sh /chemin/vers/video.mp4"
+    echo "$MSG_LIVE_WALLPAPER_USAGE"
     exit 1
 fi
 
