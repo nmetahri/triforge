@@ -95,6 +95,16 @@ This setup includes a dynamic theme switching system that allows you to easily c
 4. **Material** - Google Material Design colors
 5. **Solarized** - The popular Solarized dark theme
 6. **Gruvbox** - Warm, retro-inspired colors
+7. **Nord** - Arctic, north-bluish palette
+8. **Dracula** - Dark theme with vivid purple and pink accents
+9. **Monokai** - Classic high-contrast editor colors
+10. **Tokyo Night** - Deep blue night-city palette
+11. **Catppuccin Mocha** - Soothing pastel dark theme
+12. **Oceanic Next** - Calm ocean-blue tones
+13. **Palenight** - Soft purple Material variant
+14. **Gotham** - Very dark, low-contrast blue-green
+15. **Ayu** - Minimal dark theme with warm accents
+16. **Badwolf** - Dark theme with bright, punchy highlights
 
 ### How to Switch Themes
 Press `$mod+Shift+t` to open the theme selector (dmenu). Choose a theme from the list and it will be immediately applied to:
