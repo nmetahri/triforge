@@ -68,7 +68,7 @@ PACKAGES=(
     "light" "acpi" "blueman" "alsa-utils" "gnome-flashback" "zenity"
     "numlockx" "playerctl" "alacritty" "build-essential"
     "gdm3" "dbus-x11" "gnome-settings-daemon"
-    "dex" "xss-lock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
+    "dex" "xautolock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
     "gnome-power-manager" "git" "gnome-session" "gnome-keyring"
 )
 
