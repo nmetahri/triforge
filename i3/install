@@ -12,7 +12,7 @@ readonly PACKAGES=(
     "light" "acpi" "blueman" "alsa-utils" "gnome-flashback" "zenity"
     "numlockx" "playerctl" "build-essential"
     "gdm3" "dbus-x11" "gnome-settings-daemon"
-    "dex" "xautolock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
+    "dex" "xss-lock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
     "gnome-power-manager" "git" "gnome-session" "gnome-keyring"
 )
 readonly I3BLOCKS_REPOSITORY="https://github.com/vivien/i3blocks"

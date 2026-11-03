@@ -26,8 +26,10 @@ exec --no-startup-id dex --autostart --environment i3
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
-# xautolock locks the screen with i3lock-fancy after 10 minutes of inactivity.
-exec --no-startup-id xautolock -time 10 -locker i3lock-fancy
+# Lock the screen with i3lock-fancy after 10 minutes of inactivity (X idle timeout)
+# and before suspend: xss-lock reacts to both.
+exec --no-startup-id xset s 600 600
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
