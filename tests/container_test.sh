@@ -6,8 +6,9 @@
 set -e
 
 readonly TEST_USER="tester"
-# Branch created in the repository copy so bootstrap clones the code under test, not GitHub's main
-readonly BOOTSTRAP_TEST_BRANCH="bootstrap-under-test"
+# Tag created in the repository copy so bootstrap installs the code under test, not GitHub's main.
+# A tag rather than a branch: it exercises the release install path (TRIFORGE_REF=v1.0.0)
+readonly BOOTSTRAP_TEST_TAG="v0.0.0-under-test"
 REPOSITORY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
 readonly REPOSITORY_DIR
 
@@ -30,11 +31,11 @@ install_with_installer() {
 prepare_bootstrap_source() {
     # The test user clones this copy: it must own it, or git refuses it as a "dubious ownership" repository
     chown -R "$TEST_USER:$TEST_USER" "$REPOSITORY_DIR"
-    run_as_test_user git -C "$REPOSITORY_DIR" branch --force "$BOOTSTRAP_TEST_BRANCH" HEAD
+    run_as_test_user git -C "$REPOSITORY_DIR" tag --force "$BOOTSTRAP_TEST_TAG" HEAD
 }
 
 install_with_bootstrap() {
-    run_as_test_user env TRIFORGE_REPOSITORY="$REPOSITORY_DIR" TRIFORGE_BRANCH="$BOOTSTRAP_TEST_BRANCH" \
+    run_as_test_user env TRIFORGE_REPOSITORY="$REPOSITORY_DIR" TRIFORGE_REF="$BOOTSTRAP_TEST_TAG" \
         bash "$REPOSITORY_DIR/bootstrap" --yes "$@"
 }
 
