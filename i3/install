@@ -11,7 +11,7 @@ readonly PACKAGES=(
     "xorg" "i3-wm" "i3lock-fancy" "i3status" "dmenu" "curl" "xz-utils" "fontconfig"
     "feh" "flameshot" "bash-completion" "autoconf" "automake" "pkg-config"
     "light" "acpi" "blueman" "alsa-utils" "gnome-flashback" "zenity"
-    "numlockx" "playerctl" "build-essential" "yad"
+    "numlockx" "playerctl" "build-essential" "picom" "yad"
     "gdm3" "dbus-x11" "gnome-settings-daemon"
     "dex" "xss-lock" "network-manager-gnome" "pulseaudio-utils" "autorandr"
     "gnome-power-manager" "git" "gnome-session" "gnome-keyring"

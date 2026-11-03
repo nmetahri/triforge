@@ -208,6 +208,10 @@ bindsym $mod+Ctrl+less move workspace to output left
 ## gnome-flashback adds the keyring, polkit agent and notifications
 exec --no-startup-id gnome-flashback
 
+# Compositor: --vsync removes screen tearing (scrolling, videos) on X11, notably with Intel GPUs,
+# and GTK4 dialogs (zenity, GNOME prompts) get proper rounded corners instead of black ones
+exec --no-startup-id picom --backend glx --vsync
+
 # Set numlock on on start
 exec --no-startup-id numlockx on
 
