@@ -52,6 +52,10 @@ target_user_home() {
     getent passwd "$SUDO_USER" | cut -d: -f6
 }
 
+is_systemd_running() {
+    [ -d /run/systemd/system ]
+}
+
 run_as_target_user() {
     sudo -u "$SUDO_USER" -H "$@"
 }
@@ -64,9 +68,14 @@ install_user_file() {
     install -m 644 -o "$SUDO_USER" -g "$SUDO_USER" "$source_path" "$destination_path"
 }
 
+# Set ASSUME_YES=true to answer yes to every confirmation (non-interactive runs)
 ask_confirmation() {
     local question="$1"
     local answer
+    if [ "${ASSUME_YES:-false}" = true ]; then
+        echo "$question (y/n): y (assumed)"
+        return 0
+    fi
     read -r -p "$question (y/n): " answer
     [ "$answer" = "y" ]
 }

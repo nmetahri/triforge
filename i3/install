@@ -29,6 +29,7 @@ ${COLOR_YELLOW}Options:${COLOR_RESET}
     (no arguments)      Full installation: install packages, build i3blocks, setup config
     --update            Update only the i3 configuration files (no package installation)
     --update-config     Same as --update
+    -y, --yes           Do not ask for confirmation before installing packages
     -h, --help          Show this help message
 
 ${COLOR_YELLOW}Notes:${COLOR_RESET}
@@ -115,6 +116,10 @@ configure_gnome() {
 }
 
 enable_display_manager() {
+    if ! is_systemd_running; then
+        print_warning "systemd is not running: skipping ${DISPLAY_MANAGER} activation"
+        return 0
+    fi
     print_info "Enabling ${DISPLAY_MANAGER} service..."
     systemctl enable display-manager.service
     systemctl start display-manager.service
@@ -139,6 +144,7 @@ main() {
     while [ $# -gt 0 ]; do
         case "$1" in
             --update|--update-config) update_mode=true ;;
+            -y|--yes) export ASSUME_YES=true ;;
             -h|--help) show_help; exit 0 ;;
             *) print_error "Unknown option: $1"; echo "Use --help for usage information"; exit 1 ;;
         esac
