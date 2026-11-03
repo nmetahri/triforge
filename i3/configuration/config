@@ -166,7 +166,8 @@ mode "$mode_system" {
 bindsym $mod+Shift+e mode "$mode_system"
 
 # Background selector 
-exec --no-startup-id sh -c '[ -f ~/.last_wallpaper ] && feh --bg-scale "$(cat ~/.last_wallpaper)"'
+# Last chosen wallpaper, or the triforge one until a wallpaper is picked
+exec --no-startup-id sh -c 'if [ -f ~/.last_wallpaper ]; then feh --bg-scale "$(cat ~/.last_wallpaper)"; else feh --bg-scale ~/.config/i3/wallpapers/triforge.png; fi'
 # help: Choose a wallpaper
 # help-fr: Choisir un fond d'écran
 bindsym $mod+b exec --no-startup-id ~/.config/i3/scripts/set_wallpaper.bash
