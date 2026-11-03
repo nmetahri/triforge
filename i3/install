@@ -7,7 +7,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source "${SCRIPT_DIR}/../lib/common.sh"
 
 readonly PACKAGES=(
-    "xorg" "i3-wm" "i3lock-fancy" "i3status" "dmenu" "fonts-hack-nerd"
+    "xorg" "i3-wm" "i3lock-fancy" "i3status" "dmenu" "curl" "xz-utils" "fontconfig"
     "feh" "flameshot" "bash-completion" "autoconf" "automake" "pkg-config"
     "light" "acpi" "blueman" "alsa-utils" "gnome-flashback" "zenity"
     "numlockx" "playerctl" "build-essential"
@@ -18,6 +18,9 @@ readonly PACKAGES=(
 readonly I3BLOCKS_REPOSITORY="https://github.com/vivien/i3blocks"
 readonly I3_GNOME_REPOSITORY="https://github.com/i3-gnome/i3-gnome.git"
 readonly DISPLAY_MANAGER="gdm3"
+readonly NERD_FONTS_VERSION="v3.5.1"
+readonly HACK_NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/Hack.tar.xz"
+readonly HACK_NERD_FONT_DIRECTORY="/usr/local/share/fonts/HackNerdFont"
 
 show_help() {
     printf '%b\n' "${COLOR_BLUE}i3 Environment Setup and Configuration Installer${COLOR_RESET}
@@ -107,6 +110,19 @@ build_external_projects() {
     cd /
 }
 
+# Not packaged in Debian/Ubuntu: installed system-wide from the nerd-fonts release
+install_hack_nerd_font() {
+    if [ -d "$HACK_NERD_FONT_DIRECTORY" ]; then
+        print_success "Hack Nerd Font already installed"
+        return 0
+    fi
+    print_info "Installing Hack Nerd Font ${NERD_FONTS_VERSION}..."
+    mkdir -p "$HACK_NERD_FONT_DIRECTORY"
+    curl --fail --silent --show-error --location "$HACK_NERD_FONT_URL" | tar -xJ -C "$HACK_NERD_FONT_DIRECTORY"
+    fc-cache -f "$HACK_NERD_FONT_DIRECTORY"
+    print_success "Hack Nerd Font installed"
+}
+
 configure_gnome() {
     print_info "Configuring Gnome settings..."
     # Disable gnome flashback desktop
@@ -130,6 +146,7 @@ full_installation() {
     confirm_package_installation
     install_apt_packages "${PACKAGES[@]}"
     build_external_projects
+    install_hack_nerd_font
     configure_gnome
     setup_configuration
     enable_display_manager
