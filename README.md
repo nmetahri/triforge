@@ -128,6 +128,13 @@ i3-msg restart &
 Workspaces are pinned to outputs in `workspaces.conf` (`DP-1`, `HDMI-1`, then `eDP-1` as fallback).
 Adjust these names to your hardware: `xrandr --query` lists them.
 
+## Languages
+
+Menus and messages from the i3 scripts (theme and monitor selectors, wallpaper picker, shortcuts help...)
+follow your locale (`LC_ALL`, `LC_MESSAGES` or `LANG`). English and French are available, and English is
+used when a translation is missing. To add a language, copy `i3/configuration/locales/en.sh` to
+`locales/<code>.sh` (e.g. `de.sh`) and translate its values.
+
 ## Theme System
 
 This setup includes a dynamic theme switching system that allows you to easily change color schemes.
