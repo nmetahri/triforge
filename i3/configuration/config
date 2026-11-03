@@ -204,10 +204,8 @@ bindsym $mod+Ctrl+greater move workspace to output right
 # help-fr: Déplacer le workspace vers l'écran de gauche
 bindsym $mod+Ctrl+less move workspace to output left
 
-## Gnome Flashback Config (please see : https://github.com/i3-gnome/i3-gnome)
-exec --no-startup-id /usr/lib/gsd-xsettings
-exec_always --no-startup-id gnome-power-manager
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+## GNOME integration: the i3-gnome session already starts the gsd-* settings daemons;
+## gnome-flashback adds the keyring, polkit agent and notifications
 exec --no-startup-id gnome-flashback
 
 # Set numlock on on start
