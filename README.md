@@ -21,6 +21,10 @@ This setup builds and installs from the following external projects:
 
 Both are automatically cloned, built, and installed by the install script. Check their repositories for license information and updates.
 
+The tmux setup uses [TPM](https://github.com/tmux-plugins/tpm) to install its plugins, including
+**tmux-resurrect** from a maintained fork (https://github.com/nmetahri/tmux-resurrect) that bundles
+fixes still unmerged upstream (e.g. panes restored to `$HOME` when their title is empty).
+
 ## How to install a package ?
 
 ### Tmux
