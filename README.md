@@ -165,9 +165,8 @@ To add a custom theme:
 Alacritty is automatically configured and managed by the installation script.
 
 ### Configuration
-- Base configuration is located in `~/.config/alacritty/alacritty.yml`
+- Base configuration is located in `~/.config/alacritty/alacritty.toml` (TOML format, Alacritty 0.13+)
 - The configuration is synced during installation and updates
-- Alacritty colors are coordinated with your i3 theme system
 
 ### Updating Alacritty Config
 When you pull updates from the repository and want to update Alacritty configuration:

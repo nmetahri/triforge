@@ -110,7 +110,7 @@ setup_alacritty() {
     echo -e "${BLUE}Setting up Alacritty configuration...${NC}"
     if [ -d "${SCRIPT_DIR}/../alacritty" ]; then
         mkdir -p "${ALACRITTY_CONFIG_PATH}"
-        cp "${SCRIPT_DIR}/../alacritty/alacritty.yml" "${ALACRITTY_CONFIG_PATH}"
+        cp "${SCRIPT_DIR}/../alacritty/alacritty.toml" "${ALACRITTY_CONFIG_PATH}"
         echo -e "${GREEN}✓ Alacritty configuration copied${NC}"
     else
         echo -e "${YELLOW}⚠ Alacritty configuration directory not found. Skipping.${NC}"
