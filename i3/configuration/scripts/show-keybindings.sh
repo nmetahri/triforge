@@ -5,8 +5,8 @@
 
 readonly I3_CONFIG_DIR="$HOME/.config/i3"
 readonly CONFIG_FILES=("config" "workspaces.conf" "themes.conf" "custom.conf")
-readonly WINDOW_WIDTH=640
-readonly WINDOW_HEIGHT=480
+readonly WINDOW_WIDTH=780
+readonly WINDOW_HEIGHT=620
 # Every MSG_KEYBINDINGS_TITLE starts with "i3 — " so the i3 config floats the window in any language
 # shellcheck source=locale.sh
 source "$I3_CONFIG_DIR/scripts/locale.sh"
@@ -48,7 +48,8 @@ main() {
         zenity_rows+=("$(humanize_key "$key")" "$description")
     done < <(extract_annotated_bindings "$USER_LANGUAGE")
 
-    zenity --list --title "$MSG_KEYBINDINGS_TITLE" --width "$WINDOW_WIDTH" --height "$WINDOW_HEIGHT" \
+    zenity --list --title "$MSG_KEYBINDINGS_TITLE" --text "$MSG_KEYBINDINGS_TEXT" \
+        --width "$WINDOW_WIDTH" --height "$WINDOW_HEIGHT" \
         --column "$MSG_KEYBINDINGS_SHORTCUT_COLUMN" --column "$MSG_KEYBINDINGS_ACTION_COLUMN" \
         "${zenity_rows[@]}" > /dev/null
 }
