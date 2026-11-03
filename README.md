@@ -83,6 +83,9 @@ fixes still unmerged upstream (e.g. panes restored to `$HOME` when their title i
 * `XF86AudioPrev` Previous
 
 ### Custom key bindings
+Press `$mod+Shift+,` (`$mod+?` on AZERTY keyboards) to open a searchable list of these shortcuts.
+To add a shortcut to that list, put a `# help: <description>` comment right above its `bindsym`.
+
 * `$mod+Shift+e` Open system menu : (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 * `$mod + p` — Open monitor layout selector (`select_xrandr_profile.bash`, lists autorandr profiles)
   (see [Monitor Profiles](#monitor-profiles-autorandr))
