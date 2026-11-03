@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>triforge</title>
+  <g fill="none" stroke="#4A8BB8" stroke-width="9" stroke-linejoin="round">
+  <polygon points="128.0,31.0 16.0,225.0 240.0,225.0" stroke-opacity="0.45"/>
+  <polygon points="128.0,65.1 45.5,208.0 210.5,208.0" stroke-opacity="0.7"/>
+  <polygon points="128.0,99.1 75.0,190.9 181.0,190.9" stroke-opacity="1.0"/>
+  </g>
+</svg>
