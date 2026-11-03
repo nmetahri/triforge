@@ -38,6 +38,7 @@ require_supported_distribution() {
         exit 1
     fi
     local distribution_name
+    # shellcheck source=/dev/null
     distribution_name="$(. /etc/os-release && echo "$NAME")"
     local supported
     for supported in "${SUPPORTED_DISTRIBUTIONS[@]}"; do
