@@ -8,6 +8,11 @@ version, and a change that breaks existing installations the major version.
 
 ## [Unreleased]
 
+### Fixed
+
+- picom started twice in the i3 + GNOME session, by the i3 configuration and by the autostart entry of the picom
+  package: only the session starts it now, its options moved to `~/.config/picom/picom.conf`.
+
 ## [1.0.0] - 2026-11-03
 
 First release.

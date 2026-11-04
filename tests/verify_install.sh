@@ -35,6 +35,11 @@ tmux_config_loads() {
     return $status
 }
 
+# A program autostarted by the GNOME session must not be started again by i3
+not_started_by_i3() {
+    ! grep -qE "^exec(_always)? .*\b$1\b" "$HOME/.config/i3/config"
+}
+
 has_hack_nerd_font() {
     fc-list | grep -q "Hack Nerd Font"
 }
@@ -75,6 +80,9 @@ verify_i3() {
     check "i3blocks built and installed" command -v i3blocks
     check "I3 + GNOME session registered" test -f /usr/share/xsessions/i3-gnome.desktop
     check "picom compositor installed" command -v picom
+    check "picom started by the GNOME session" test -f /etc/xdg/autostart/picom.desktop
+    check "picom configuration copied" test -f "$HOME/.config/picom/picom.conf"
+    check "picom not started by the i3 configuration" not_started_by_i3 picom
     check "Hack Nerd Font available" has_hack_nerd_font
     check "first-start theme bootstrap succeeds" bootstrap_i3_theme
     check "i3 configuration is valid (i3 -C)" i3 -C -c "$HOME/.config/i3/config"
