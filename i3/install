@@ -63,9 +63,16 @@ setup_i3blocks() {
     print_success "i3blocks configuration copied"
 }
 
+setup_picom() {
+    print_info "Setting up picom configuration..."
+    copy_directory_to_user_config "${SCRIPT_DIR}/picom" "${TARGET_HOME}/.config/picom"
+    print_success "picom configuration copied"
+}
+
 setup_configuration() {
     setup_i3_config
     setup_i3blocks
+    setup_picom
 }
 
 update_configuration() {
